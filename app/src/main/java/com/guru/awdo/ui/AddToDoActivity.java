@@ -99,11 +99,15 @@ public class AddToDoActivity extends AppCompatActivity {
 
 
 
+
+
         mTempDate = String.valueOf(mDate);
         mTempMonth = String.valueOf(mMonth);
         mTempYear = String.valueOf(mYear);
         mTempHour = String.valueOf(mHour);
         mTempMin = String.valueOf(mMinute);
+
+
 
         mTimeStamp = Long.parseLong(mTempYear+mTempMonth+mTempDate+mHour+mMinute);
        // mTempDate = String.valueOf(new SimpleDateFormat("yyyyMMdd").getCalendar().getTime());
@@ -155,9 +159,18 @@ public class AddToDoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar lCalendar = Calendar.getInstance();
                         lCalendar.add(Calendar.HOUR_OF_DAY,1);
-                mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR_OF_DAY));
+                mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR));
                 mSelectedHour = lCalendar.get(Calendar.HOUR_OF_DAY);
                 Log.d("Hours"," "+String.valueOf(lCalendar.get(Calendar.HOUR)));
+                int lAmPm = lCalendar.get(Calendar.AM_PM);
+                if (lAmPm == 0)
+                {
+                    mAMorPM = "AM";
+                }else {
+                    mAMorPM = "PM";
+                }
+
+                updateSelectedTime();
             }
         });
 
@@ -166,9 +179,18 @@ public class AddToDoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar lCalendar = Calendar.getInstance();
                 lCalendar.add(Calendar.HOUR_OF_DAY,2);
-                mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR_OF_DAY));
+                mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR));
                 mSelectedHour = lCalendar.get(Calendar.HOUR_OF_DAY);
                 Log.d("Hours"," "+String.valueOf(lCalendar.get(Calendar.HOUR)));
+
+                int lAmPm = lCalendar.get(Calendar.AM_PM);
+                if (lAmPm == 0)
+                {
+                    mAMorPM = "AM";
+                }else {
+                    mAMorPM = "PM";
+                }
+                updateSelectedTime();
 
             }
         });
@@ -179,15 +201,35 @@ public class AddToDoActivity extends AppCompatActivity {
                 Calendar lCalendar = Calendar.getInstance();
                 lCalendar.add(Calendar.DAY_OF_MONTH,1);
                 mTempDate = String.valueOf(lCalendar.get(Calendar.DAY_OF_MONTH));
+                mTempMonth = String.valueOf(lCalendar.get(Calendar.MONTH)+1);
                 mSelectedDate = lCalendar.get(Calendar.DAY_OF_MONTH);
+
+                int lAmPm = lCalendar.get(Calendar.AM_PM);
+                if (lAmPm == 0)
+                {
+                    mAMorPM = "AM";
+                }else {
+                    mAMorPM = "PM";
+                }
+                updateSelectedTime();
             }
         });
+
         mTodayBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar lCalendar = Calendar.getInstance();
                 mTempDate = String.valueOf(lCalendar.get(Calendar.DAY_OF_MONTH));
                 mSelectedDate = lCalendar.get(Calendar.DAY_OF_MONTH);
+
+                int lAmPm = lCalendar.get(Calendar.AM_PM);
+                if (lAmPm == 0)
+                {
+                    mAMorPM = "AM";
+                }else {
+                    mAMorPM = "PM";
+                }
+                updateSelectedTime();
             }
         });
 
@@ -214,6 +256,10 @@ public class AddToDoActivity extends AppCompatActivity {
                        mSelectedMonth = month;
                        mSelectedDate = dayOfMonth;
 
+                       updateSelectedTime();
+
+
+
                    }
                },mYear,lCalendar.get(Calendar.MONTH),mDate);
                lDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -223,6 +269,7 @@ public class AddToDoActivity extends AppCompatActivity {
 
 
             }
+
         });
 
         mCustomTimeBt.setOnClickListener(new View.OnClickListener() {
@@ -234,11 +281,25 @@ public class AddToDoActivity extends AppCompatActivity {
 
                         Log.d("timepicker"," "+hourOfDay+minute);
 
-                        mTempHour = String.valueOf(hourOfDay);
+
                         mTempMin = String.valueOf(minute);
 
                         mSelectedHour = hourOfDay;
                         mSelectedMinute = minute;
+                        Calendar lCalendar = Calendar.getInstance();
+                        lCalendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        lCalendar.set(Calendar.MINUTE,minute);
+
+                        mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR));
+
+                          int lAmPm = lCalendar.get(Calendar.AM_PM);
+                        if (lAmPm == 0)
+                        {
+                            mAMorPM = "AM";
+                        }else {
+                            mAMorPM = "PM";
+                        }
+                        updateSelectedTime();
 
                     }
                 },mHour,mMinute,false);
@@ -284,7 +345,10 @@ public class AddToDoActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     *
+     * @return
+     */
     private boolean checkDataNotNull()
     {
         if (mDescriptionET.getText().toString().length() != 0 )
@@ -309,14 +373,17 @@ public class AddToDoActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     */
     private void updateSelectedTime()
     {
-        mTimeSetTv.setText("");
-        mTimeSetTv.append("");//hours
-        mTimeSetTv.append("");//mins
-        mTimeSetTv.append(" ");//am/pm
-        mTimeSetTv.append("");//day
-        mTimeSetTv.append("");//month
+        mTimeSetTv.setText(""+"Remind me at ");
+        mTimeSetTv.append(""+mTempHour);//hours
+        mTimeSetTv.append("."+mTempMin);//mins
+        mTimeSetTv.append(" "+mAMorPM);//am/pm
+        mTimeSetTv.append(" on "+mTempDate);//day
+        mTimeSetTv.append("/"+mTempMonth);//month
     }
 
 }

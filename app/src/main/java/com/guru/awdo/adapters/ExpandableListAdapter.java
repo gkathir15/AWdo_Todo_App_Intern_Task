@@ -24,10 +24,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     List<ToDoData> mUpcomingList = new ArrayList<>();
     List<ToDoData> mTodayList = new ArrayList<>();
     List<ToDoData> mTomorrowList = new ArrayList<>();
-    HashMap<String,List<ToDoData>> mMapOfChildList;
+    HashMap<Integer, List<ToDoData>> mMapOfChildList;
     List<String> mParentTitle = new ArrayList<>();
 
-    public ExpandableListAdapter(Context mContext, HashMap<String, List<ToDoData>> mMapOfChildList, List<String> mParentTitle) {
+    public ExpandableListAdapter(Context mContext, HashMap<Integer, List<ToDoData>> mMapOfChildList, List<String> mParentTitle) {
         this.mContext = mContext;
         this.mMapOfChildList = mMapOfChildList;
         this.mParentTitle = mParentTitle;

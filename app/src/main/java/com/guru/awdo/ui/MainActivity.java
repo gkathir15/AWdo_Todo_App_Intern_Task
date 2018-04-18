@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 
 import com.facebook.stetho.Stetho;
@@ -27,7 +28,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     ExpandableListView mExpandableListView;
-    HashMap mExpandableListParentData = new HashMap();
+    HashMap<Integer,List<ToDoData>> mExpandableListParentData= new HashMap();
     ExpandableListAdapter mExpandableListAdapter;
     List<ToDoData> mUpcoming = new ArrayList<>();
     List<ToDoData> mTomorrow = new ArrayList<>();
@@ -73,7 +74,14 @@ public class MainActivity extends AppCompatActivity {
         mExpandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                return false;
+                ToDoData lTodoData = mExpandableListParentData.get(groupPosition).get(childPosition);
+
+                Intent lIntent = new Intent(getApplicationContext(),EditTodoActivity.class);
+                lIntent.putExtra("TodoData",lTodoData);
+                startActivity(lIntent);
+                overridePendingTransition(R.anim.slide_from_right,R.anim.slide_to_left);
+
+                return true;
             }
         });
 

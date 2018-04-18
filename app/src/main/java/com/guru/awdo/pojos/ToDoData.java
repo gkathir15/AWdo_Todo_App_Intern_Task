@@ -2,11 +2,13 @@ package com.guru.awdo.pojos;
 
 import com.guru.awdo.constants.ToDoTableEntries;
 
+import java.io.Serializable;
+
 /**
  * Created by Guru on 12-04-2018.
  */
 
-public class ToDoData {
+public class ToDoData implements Serializable {
 
 
     private String mDescription,mCategory;

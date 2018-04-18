@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new FetchTodoTasks().execute();
+
 
         mExpandableListParentData.put(0,mUpcoming);
-        mExpandableListParentData.put(1,mUpcoming);
-        mExpandableListParentData.put(2,mUpcoming);
+        mExpandableListParentData.put(1,mToday);
+        mExpandableListParentData.put(2,mTomorrow);
 
 
         mExpandableListAdapter = new ExpandableListAdapter(this,mExpandableListParentData,mParentTitles);
@@ -79,20 +79,48 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new FetchTodoTasks().execute();
+    }
+
     class FetchTodoTasks extends AsyncTask<Void,Void,Void>
     {
 
         @Override
         protected Void doInBackground(Void... voids) {
 
+            mUpcoming.clear();
+            mToday.clear();
+            mTomorrow.clear();
+
             ToDoTableHelper mToDoTableHelper = new ToDoTableHelper(MainActivity.this);
             SimpleDateFormat lSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyyMMddHHmm");
             mCalendar = Calendar.getInstance();
+            String lCurrentMs= String.valueOf(mCalendar.getTimeInMillis());
             mCalendar.add(Calendar.HOUR_OF_DAY,8);
-            String lTempString = lSimpleDateFormatOfHourMinute.format(mCalendar.getTime());
-            Log.d("time plus8 hrs  ",lTempString);
-            mCalendar.clear();
-            mUpcoming.addAll(mToDoTableHelper.retrieveWithWhereClause(ToDoTableEntries.COLUMN_DEADLINE+"<=",lTempString));
+            String lUpComing = String.valueOf(mCalendar.getTimeInMillis());
+            Log.d("time plus8 hrs  ",lUpComing);
+            mUpcoming.addAll(mToDoTableHelper.retrieveWithWhereClause(ToDoTableEntries.COLUMN_DEADLINE," BETWEEN " +lCurrentMs+" AND "+lUpComing));
+
+            mCalendar = Calendar.getInstance();
+            mCalendar.set(Calendar.HOUR_OF_DAY,0);
+            String lDayStart = String.valueOf(mCalendar.getTimeInMillis());
+            mCalendar.set(Calendar.HOUR_OF_DAY,23);
+            String lDayEnd = String.valueOf(mCalendar.getTimeInMillis());
+            mToday.addAll(mToDoTableHelper.retrieveWithWhereClause(ToDoTableEntries.COLUMN_DEADLINE," BETWEEN " +lDayStart+" AND "+lDayEnd));
+
+            mCalendar = Calendar.getInstance();
+            mCalendar.add(Calendar.DAY_OF_MONTH,1);
+            mCalendar.set(Calendar.HOUR_OF_DAY,0);
+            lDayStart = String.valueOf(mCalendar.getTimeInMillis());
+            mCalendar.set(Calendar.HOUR_OF_DAY,23);
+            lDayEnd = String.valueOf(mCalendar.getTimeInMillis());
+            mTomorrow.addAll(mToDoTableHelper.retrieveWithWhereClause(ToDoTableEntries.COLUMN_DEADLINE," BETWEEN " +lDayStart+" AND "+lDayEnd));
+
+
+
 
             return null;
         }

@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -18,10 +19,14 @@ import com.guru.awdo.R;
 import com.guru.awdo.db.ToDoTableHelper;
 import com.guru.awdo.pojos.ToDoData;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.time.LocalDateTime;
 
 public class AddToDoActivity extends AppCompatActivity {
 
@@ -29,6 +34,7 @@ public class AddToDoActivity extends AppCompatActivity {
     private AutoCompleteTextView mAutocompleteCategoryView;
     private Button   mTodayBt,mTomorrowBt,mCustomDateBt,mCustomTimeBt,mSubmitBt;
     private Button   mPlusOneHourBt,mPlusTwoHourBt;
+    private TextView mTimeSetTv;
     ToDoTableHelper moDoTableHelper;
 //    private DatePickerDialog mDatePicker;
 //    private TimePickerDialog mTimePickerDialog;
@@ -37,10 +43,10 @@ public class AddToDoActivity extends AppCompatActivity {
     private String mTempDate,mTempMonth,mTempYear,mTempHour,mTempMin;
     private String mAMorPM;
     SimpleDateFormat mSimpleDateFormatOfHourMinute;
-    String [] mSampleCategory = {"Work","Personal","Priority"};
     List<String>mCategoryList = new ArrayList<>();
     ToDoData mToDoData = new ToDoData();
     ToDoTableHelper mTodoTableHelper = new ToDoTableHelper(this);
+    int mSelectedYear,mSelectedMonth,mSelectedDate,mSelectedHour,mSelectedMinute;
 
     private String mDescriptionVal,mCategoryVal;
 
@@ -53,9 +59,12 @@ public class AddToDoActivity extends AppCompatActivity {
         mAutocompleteCategoryView = findViewById(R.id.add_category);
         mSubmitBt = findViewById(R.id.submit);
 
+       // Log.d("date check", " "+);
+
         mTodayBt = findViewById(R.id.today);
         mTomorrowBt = findViewById(R.id.tomorrow);
         mCustomDateBt = findViewById(R.id.custom_date_picker);
+        mTimeSetTv = findViewById(R.id.time);
 
         mPlusOneHourBt = findViewById(R.id.plus_1hour);
         mPlusTwoHourBt = findViewById(R.id.plus2hour);
@@ -72,14 +81,21 @@ public class AddToDoActivity extends AppCompatActivity {
         mAutocompleteCategoryView.setAdapter(mAutoCompleteTxtAdapter);
 
 
-//        mSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyyMMddHHmm");
+        mSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyyMMddHHmm");
 
         final Calendar lCalendar = Calendar.getInstance();
         mYear = lCalendar.get(Calendar.YEAR);
-        mMonth = lCalendar.get(Calendar.MONTH)+1;
+        mMonth = lCalendar.get(Calendar.MONTH);
         mDate = lCalendar.get(Calendar.DAY_OF_MONTH);
         mHour = lCalendar.get(Calendar.HOUR_OF_DAY);
         mMinute = lCalendar.get(Calendar.MINUTE);
+
+
+        mSelectedYear = mYear;
+        mSelectedMonth = mMonth;
+        mSelectedDate = mDate;
+        mSelectedHour = mHour;
+        mSelectedMinute = mMinute;
 
 
 
@@ -98,9 +114,25 @@ public class AddToDoActivity extends AppCompatActivity {
         Log.d("Hours"," "+Calendar.HOUR+1+" "+ Calendar.HOUR_OF_DAY+1);
 
         lCalendar.add(Calendar.HOUR,1);
+        int lAmPm = lCalendar.get(Calendar.AM_PM);
+        if (lAmPm == 0)
+        {
+            mAMorPM = "AM";
+        }else {
+            mAMorPM = "PM";
+        }
         mPlusOneHourBt.setText(lCalendar.get(Calendar.HOUR)+":"+lCalendar.get(Calendar.MINUTE));
+        mPlusOneHourBt.append(" "+mAMorPM);
         lCalendar.add(Calendar.HOUR,1);
+        lAmPm = lCalendar.get(Calendar.AM_PM);
+        if (lAmPm == 0)
+        {
+            mAMorPM = "AM";
+        }else {
+            mAMorPM = "PM";
+        }
         mPlusTwoHourBt.setText(lCalendar.get(Calendar.HOUR)+":"+lCalendar.get(Calendar.MINUTE));
+        mPlusTwoHourBt.append(" "+mAMorPM);
 
         mDescriptionET.requestFocus();
 
@@ -124,6 +156,7 @@ public class AddToDoActivity extends AppCompatActivity {
                 Calendar lCalendar = Calendar.getInstance();
                         lCalendar.add(Calendar.HOUR_OF_DAY,1);
                 mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR_OF_DAY));
+                mSelectedHour = lCalendar.get(Calendar.HOUR_OF_DAY);
                 Log.d("Hours"," "+String.valueOf(lCalendar.get(Calendar.HOUR)));
             }
         });
@@ -134,6 +167,7 @@ public class AddToDoActivity extends AppCompatActivity {
                 Calendar lCalendar = Calendar.getInstance();
                 lCalendar.add(Calendar.HOUR_OF_DAY,2);
                 mTempHour = String.valueOf(lCalendar.get(Calendar.HOUR_OF_DAY));
+                mSelectedHour = lCalendar.get(Calendar.HOUR_OF_DAY);
                 Log.d("Hours"," "+String.valueOf(lCalendar.get(Calendar.HOUR)));
 
             }
@@ -145,13 +179,15 @@ public class AddToDoActivity extends AppCompatActivity {
                 Calendar lCalendar = Calendar.getInstance();
                 lCalendar.add(Calendar.DAY_OF_MONTH,1);
                 mTempDate = String.valueOf(lCalendar.get(Calendar.DAY_OF_MONTH));
+                mSelectedDate = lCalendar.get(Calendar.DAY_OF_MONTH);
             }
         });
         mTodayBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTempHour = String.valueOf(mDate);
+                Calendar lCalendar = Calendar.getInstance();
                 mTempDate = String.valueOf(lCalendar.get(Calendar.DAY_OF_MONTH));
+                mSelectedDate = lCalendar.get(Calendar.DAY_OF_MONTH);
             }
         });
 
@@ -173,6 +209,10 @@ public class AddToDoActivity extends AppCompatActivity {
                        mTempDate = String.valueOf(dayOfMonth);
                        mTempMonth = String.valueOf(month+1);
                        mTempYear = String.valueOf(year);
+
+                       mSelectedYear = year;
+                       mSelectedMonth = month;
+                       mSelectedDate = dayOfMonth;
 
                    }
                },mYear,lCalendar.get(Calendar.MONTH),mDate);
@@ -197,6 +237,9 @@ public class AddToDoActivity extends AppCompatActivity {
                         mTempHour = String.valueOf(hourOfDay);
                         mTempMin = String.valueOf(minute);
 
+                        mSelectedHour = hourOfDay;
+                        mSelectedMinute = minute;
+
                     }
                 },mHour,mMinute,false);
                 lTimePickerDialog.show();
@@ -217,9 +260,13 @@ public class AddToDoActivity extends AppCompatActivity {
                 {
                     mToDoData.setmDescription(String.valueOf(mDescriptionET.getText()));
                     mToDoData.setmCategory(String.valueOf(mAutocompleteCategoryView.getText()));
-                    mToDoData.setmDeadline(Long.valueOf(mTempYear+mTempMonth+mTempDate+mTempHour+mTempMin));
-                    Log.d("deadline",mTempYear+mTempMonth+mTempDate+mTempHour+mTempMin);
-                    mToDoData.setmTimeStamp(mTimeStamp);
+                    Calendar lCalendar = Calendar.getInstance();
+                    lCalendar.set(mSelectedYear,mSelectedMonth,mSelectedDate,mSelectedHour,mSelectedMinute);
+                    Log.d("deadline in ms"," "+lCalendar.getTimeInMillis());
+
+                    mToDoData.setmDeadline(lCalendar.getTimeInMillis());
+                   // Log.d("deadline","milli secs "+mToDoData.getmDeadline());
+                    mToDoData.setmTimeStamp(System.currentTimeMillis());
                   // Log.d("timestamp","  "+Long.parseLong(mSimpleDateFormatOfHourMinute.format(new Date())));
 
                     //db Insertion
@@ -235,6 +282,8 @@ public class AddToDoActivity extends AppCompatActivity {
 
 
     }
+
+
 
     private boolean checkDataNotNull()
     {
@@ -258,6 +307,16 @@ public class AddToDoActivity extends AppCompatActivity {
 
         return false;
 
+    }
+
+    private void updateSelectedTime()
+    {
+        mTimeSetTv.setText("");
+        mTimeSetTv.append("");//hours
+        mTimeSetTv.append("");//mins
+        mTimeSetTv.append(" ");//am/pm
+        mTimeSetTv.append("");//day
+        mTimeSetTv.append("");//month
     }
 
 }

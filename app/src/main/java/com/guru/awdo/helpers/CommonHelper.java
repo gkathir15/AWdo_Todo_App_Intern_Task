@@ -8,13 +8,13 @@ import java.util.Date;
  */
 public class CommonHelper {
 
-    private SimpleDateFormat lSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyy/MM/dd/HH/mm");
+    private SimpleDateFormat mSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyy/MM/dd/HH/mm");
 
     public String longDateToFormattedDate(Long pLongDate)
     {
         String lDateString;
         Date lDate = new Date(pLongDate);
-        lDateString = lSimpleDateFormatOfHourMinute.format(lDate);
+        lDateString = mSimpleDateFormatOfHourMinute.format(lDate);
         return lDateString;
     }
 }

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.AddToDoActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
     <EditText
@@ -13,15 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:hint="Description"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginHorizontal="5dp"/>
+        android:layout_margin="5dp"
+        android:inputType="textAutoComplete"/>
 
 
     <AutoCompleteTextView
         android:id="@+id/add_category"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:hint="Category"
         android:ems="10"/>
@@ -34,13 +37,22 @@
     android:textAlignment="center"
     tools:text="12.30 pm 30 april"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Date"
+        android:background="#eff5fa"
+        android:layout_margin="5dp"
+        android:padding="4dp"/>
+
     <LinearLayout
         android:id="@+id/date_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
         android:padding="4dp"
-        android:layout_marginHorizontal="30dp">
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
         <!--android:layout_margin="5dp">-->
 
         <Button
@@ -77,12 +89,21 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Time"
+        android:background="#eff5fa"
+        android:layout_margin="5dp"
+        android:padding="4dp"/>
+
     <LinearLayout
         android:id="@+id/time_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginHorizontal="30dp">
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
 
         <Button
             android:id="@+id/plus_1hour"
@@ -121,7 +142,10 @@
         android:background="@drawable/button_long"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
+        android:layout_marginBottom="15dp"
         />
 
-
 </LinearLayout>
+
+
+</ScrollView>

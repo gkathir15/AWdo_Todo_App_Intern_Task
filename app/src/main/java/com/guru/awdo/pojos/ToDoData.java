@@ -12,8 +12,9 @@ public class ToDoData implements Serializable {
 
 
     private String mDescription,mCategory;
-    private boolean mIsRecurring,mIsDone,mIsPending,mNotifyEnabled;
-    private int mPriority,mID;
+    private boolean mIsRecurring,mIsDone,mIsPending;
+    private int mPriority;
+    private long mID;
     private long mDeadline,mTimeStamp;
 
     public long getmDeadline() {
@@ -32,11 +33,11 @@ public class ToDoData implements Serializable {
         this.mTimeStamp = mTimeStamp;
     }
 
-    public int getmID() {
+    public long getmID() {
         return mID;
     }
 
-    public void setmID(int mID) {
+    public void setmID(long mID) {
         this.mID = mID;
     }
 

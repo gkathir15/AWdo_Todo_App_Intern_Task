@@ -20,11 +20,39 @@
 
   <ExpandableListView
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_height="wrap_content"
       android:id="@+id/parent_expandable_list"
       android:layout_marginVertical="4dp"
       android:layout_marginHorizontal="4dp">
   </ExpandableListView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/parent_expandable_list"
+        android:id="@+id/split"
+        android:background="#c6c6c6"/>
+
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/category_txt"
+       android:layout_below="@+id/split"
+       android:textAlignment="center"
+       android:text="Category"
+       android:layout_margin="4dp"
+       android:padding="4dp"
+       android:layout_marginTop="10dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/category_txt"
+        android:id="@+id/category_recycler"
+        android:layout_margin="4dp">
+    </android.support.v7.widget.RecyclerView>
+
+
 
 
 </RelativeLayout>

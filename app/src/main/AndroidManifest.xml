@@ -16,8 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AddToDoActivity"></activity>
-        <activity android:name=".ui.EditTodoActivity"></activity>
+        <activity android:name=".ui.AddToDoActivity" />
+        <activity android:name=".ui.EditToDoActivity" />
+
+        <receiver android:name=".receiver.AlarmReceiver" />
+        <receiver android:name=".receiver.NotificationDoneReceiver" />
+
+        <activity android:name=".ui.TaskByCategoryActivity"></activity>
     </application>
 
 </manifest>

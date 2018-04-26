@@ -4,10 +4,8 @@
         android:height="20dp"
         android:width="60dp"/>
     <gradient
-        android:endColor="#CE93D8"
-        android:startColor="#F8BBD0" />
-    <stroke
-        android:color="@color/colorAccent"/>
+        android:endColor="#ffffff"
+        android:startColor="#f8fcff" />
     <corners
         android:radius="10dp"/>
 </shape>

@@ -8,8 +8,13 @@ import java.util.Date;
  */
 public class CommonHelper {
 
-    private SimpleDateFormat mSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyy/MM/dd/HH/mm");
+    private SimpleDateFormat mSimpleDateFormatOfHourMinute = new SimpleDateFormat("yyyy/MMM/dd hh.mm aa");
 
+    /**
+     * method to return formatted date from milli sec
+     * @param pLongDate
+     * @return
+     */
     public String longDateToFormattedDate(Long pLongDate)
     {
         String lDateString;
